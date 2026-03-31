@@ -1,4 +1,5 @@
 import 'package:finflow_app/core/theme/finflow_theme.dart';
+import 'package:finflow_app/core/widgets/widget_gallery_screen.dart';
 import 'package:flutter/material.dart';
 
 class FinFlowApp extends StatelessWidget {
@@ -9,7 +10,7 @@ class FinFlowApp extends StatelessWidget {
     return MaterialApp(
       title: 'FinFlow',
       theme: FFTheme.glacier(),
-      home: Scaffold(body: Center(child: Text('FinFlow - coming soon'))),
+      home: const WidgetGalleryScreen(),
     );
   }
 }

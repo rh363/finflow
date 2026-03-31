@@ -1,0 +1,55 @@
+import 'package:finflow_app/core/widgets/ff_bottom_nav.dart';
+import 'package:finflow_app/features/calendar/presentation/calendar_screen.dart';
+import 'package:finflow_app/features/dashboard/presentation/dashboard_screen.dart';
+import 'package:finflow_app/features/settings/presentation/settings_screen.dart';
+import 'package:finflow_app/features/transactions/presentation/transactions_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class AppRouter {
+  static const _paths = [
+    '/dashboard',
+    '/transactions',
+    '/calendar',
+    '/settings',
+  ];
+
+  static int _indexFromLocation(String location) {
+    return _paths.indexOf(location);
+  }
+
+  static final router = GoRouter(
+    initialLocation: '/dashboard',
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+          return Scaffold(
+            body: child,
+            bottomNavigationBar: FFBottomNav(
+              currentIndex: _indexFromLocation(state.uri.path),
+              onDestinationSelected: (idx) => context.go(_paths[idx]),
+            ),
+          );
+        },
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const DashboardScreen(),
+          ),
+          GoRoute(
+            path: '/transactions',
+            builder: (context, state) => const TransactionsScreen(),
+          ),
+          GoRoute(
+            path: '/calendar',
+            builder: (context, state) => const CalendarScreen(),
+          ),
+          GoRoute(
+            path: '/settings',
+            builder: (context, state) => const SettingsScreen(),
+          ),
+        ],
+      ),
+    ],
+  );
+}

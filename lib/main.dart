@@ -1,11 +1,11 @@
 import 'package:finflow_app/app.dart';
-import 'package:finflow_app/core/database/app_database.dart';
 import 'package:flutter/material.dart';
-
-import 'core/database/connection.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  final db = AppDatabase(openConnection());
-  runApp(const FinFlowApp());
+  runApp(const ProviderScope(child: FinFlowApp()));
   // runApp(const FinFlowAppGallery());
+  // runApp(
+  //   const ProviderScope(child: FinFlowTestPage(child: CategoriesScreen())),
+  // );
 }

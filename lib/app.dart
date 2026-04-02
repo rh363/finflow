@@ -28,3 +28,18 @@ class FinFlowAppGallery extends StatelessWidget {
     );
   }
 }
+
+class FinFlowTestPage extends StatelessWidget {
+  final Widget child;
+
+  const FinFlowTestPage({required this.child, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "FinFlow Test",
+      theme: FFTheme.glacier(),
+      home: child,
+    );
+  }
+}

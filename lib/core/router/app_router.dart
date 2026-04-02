@@ -1,8 +1,9 @@
 import 'package:finflow_app/core/widgets/ff_bottom_nav.dart';
-import 'package:finflow_app/features/calendar/presentation/calendar_screen.dart';
-import 'package:finflow_app/features/dashboard/presentation/dashboard_screen.dart';
-import 'package:finflow_app/features/settings/presentation/settings_screen.dart';
-import 'package:finflow_app/features/transactions/presentation/transactions_screen.dart';
+import 'package:finflow_app/features/calendar/presentation/screens/calendar_screen.dart';
+import 'package:finflow_app/features/categories/presentation/screens/categories_screen.dart';
+import 'package:finflow_app/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:finflow_app/features/settings/presentation/screens/settings_screen.dart';
+import 'package:finflow_app/features/transactions/presentation/screens/transactions_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,11 +16,11 @@ class AppRouter {
   ];
 
   static int _indexFromLocation(String location) {
-    return _paths.indexOf(location);
+    return _paths.indexOf("/${location.split('/')[1]}");
   }
 
   static final router = GoRouter(
-    initialLocation: '/dashboard',
+    initialLocation: '/settings/categories',
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -47,6 +48,12 @@ class AppRouter {
           GoRoute(
             path: '/settings',
             builder: (context, state) => const SettingsScreen(),
+            routes: [
+              GoRoute(
+                path: 'categories',
+                builder: (context, state) => const CategoriesScreen(),
+              ),
+            ],
           ),
         ],
       ),

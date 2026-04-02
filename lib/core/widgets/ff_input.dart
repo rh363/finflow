@@ -66,6 +66,7 @@ class _FFInputState extends State<FFInput> {
             borderRadius: FFRadius.xs,
           ),
           child: TextField(
+            controller: widget.controller,
             focusNode: _focusNode,
             onChanged: widget.onChanged,
             style: FFTypography.bodyMd.copyWith(color: colors.textPrimary),

@@ -9,9 +9,13 @@ class RecurringPaymentsTable extends Table {
 
   IntColumn get type => integer()();
 
-  IntColumn get accountId => integer()();
+  IntColumn get accountId => integer().nullable().customConstraint(
+    'REFERENCES accounts_table(id) ON DELETE SET NULL',
+  )();
 
-  IntColumn get categoryId => integer()();
+  IntColumn get categoryId => integer().nullable().customConstraint(
+    'REFERENCES categories_table(id) ON DELETE SET NULL',
+  )();
 
   IntColumn get frequency => integer()();
 

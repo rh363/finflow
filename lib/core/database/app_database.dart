@@ -23,5 +23,15 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (migrator, from, to) async {
+      if (from < 2) {
+        await migrator.alterTable(.new(transactionsTable));
+        await migrator.alterTable(.new(recurringPaymentsTable));
+      }
+    },
+  );
 }

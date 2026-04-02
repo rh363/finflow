@@ -4,18 +4,21 @@ import 'package:finflow_app/core/theme/finflow_spacing.dart';
 import 'package:finflow_app/core/theme/finflow_typography.dart';
 import 'package:finflow_app/core/widgets/ff_button.dart';
 import 'package:finflow_app/core/widgets/ff_input.dart';
+import 'package:finflow_app/features/categories/domain/category.dart';
 import 'package:finflow_app/features/categories/presentation/providers/categories_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddCategorySheet extends ConsumerStatefulWidget {
-  const AddCategorySheet({super.key});
+class CategorySheet extends ConsumerStatefulWidget {
+  final Category? category;
+
+  const CategorySheet({this.category, super.key});
 
   @override
-  ConsumerState<AddCategorySheet> createState() => _AddCategorySheetState();
+  ConsumerState<CategorySheet> createState() => _CategorySheetState();
 }
 
-class _AddCategorySheetState extends ConsumerState<AddCategorySheet> {
+class _CategorySheetState extends ConsumerState<CategorySheet> {
   final _nameController = TextEditingController();
   String _selectedEmoji = '🏠';
   bool _isNameValid = false;
@@ -24,6 +27,7 @@ class _AddCategorySheetState extends ConsumerState<AddCategorySheet> {
     '🏠',
     '🚗',
     '🍕',
+    '💻',
     '🎮',
     '💊',
     '💰',
@@ -36,6 +40,19 @@ class _AddCategorySheetState extends ConsumerState<AddCategorySheet> {
   ];
 
   bool _isSelectedEmoji(String emoji) => _selectedEmoji == emoji;
+
+  bool get _isInEditMode => widget.category != null;
+
+  @override
+  void initState() {
+    super.initState();
+    final cat = widget.category;
+    if (cat != null) {
+      _nameController.text = cat.name;
+      _selectedEmoji = cat.icon;
+      _isNameValid = true;
+    }
+  }
 
   @override
   void dispose() {
@@ -70,7 +87,7 @@ class _AddCategorySheetState extends ConsumerState<AddCategorySheet> {
           ),
           const SizedBox(height: FFSpacing.lg),
           Text(
-            "Nuova categoria",
+            _isInEditMode ? "Modifica categoria" : "Nuova categoria",
             style: FFTypography.headingMd.copyWith(color: colors.textPrimary),
           ),
           const SizedBox(height: FFSpacing.lg),
@@ -129,11 +146,21 @@ class _AddCategorySheetState extends ConsumerState<AddCategorySheet> {
               onPressed: _isNameValid
                   ? () {
                       final repo = ref.read(categoriesRepositoryProvider);
-                      repo.add(
-                        name: _nameController.text,
-                        icon: _selectedEmoji,
-                        color: colors.bgCardAlt.hashCode,
-                      );
+                      if (_isInEditMode) {
+                        final c = widget.category!;
+                        repo.update(
+                          id: int.parse(c.id),
+                          name: _nameController.text,
+                          icon: _selectedEmoji,
+                          color: colors.bgCardAlt.hashCode,
+                        );
+                      } else {
+                        repo.add(
+                          name: _nameController.text,
+                          icon: _selectedEmoji,
+                          color: colors.bgCardAlt.hashCode,
+                        );
+                      }
                       Navigator.pop(context);
                     }
                   : null,

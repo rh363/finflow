@@ -795,9 +795,10 @@ class $TransactionsTableTable extends TransactionsTable
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
     'category_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    $customConstraints: 'REFERENCES categories_table(id) ON DELETE SET NULL',
   );
   static const VerificationMeta _accountIdMeta = const VerificationMeta(
     'accountId',
@@ -806,9 +807,10 @@ class $TransactionsTableTable extends TransactionsTable
   late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
     'account_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    $customConstraints: 'REFERENCES accounts_table(id) ON DELETE SET NULL',
   );
   static const VerificationMeta _dateMeta = const VerificationMeta('date');
   @override
@@ -874,16 +876,12 @@ class $TransactionsTableTable extends TransactionsTable
         _categoryIdMeta,
         categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
     }
     if (data.containsKey('account_id')) {
       context.handle(
         _accountIdMeta,
         accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_accountIdMeta);
     }
     if (data.containsKey('date')) {
       context.handle(
@@ -923,11 +921,11 @@ class $TransactionsTableTable extends TransactionsTable
       categoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}category_id'],
-      )!,
+      ),
       accountId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}account_id'],
-      )!,
+      ),
       date: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}date'],
@@ -950,16 +948,16 @@ class TransactionsTableData extends DataClass
   final int id;
   final double amount;
   final int type;
-  final int categoryId;
-  final int accountId;
+  final int? categoryId;
+  final int? accountId;
   final DateTime date;
   final String? notes;
   const TransactionsTableData({
     required this.id,
     required this.amount,
     required this.type,
-    required this.categoryId,
-    required this.accountId,
+    this.categoryId,
+    this.accountId,
     required this.date,
     this.notes,
   });
@@ -969,8 +967,12 @@ class TransactionsTableData extends DataClass
     map['id'] = Variable<int>(id);
     map['amount'] = Variable<double>(amount);
     map['type'] = Variable<int>(type);
-    map['category_id'] = Variable<int>(categoryId);
-    map['account_id'] = Variable<int>(accountId);
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<int>(categoryId);
+    }
+    if (!nullToAbsent || accountId != null) {
+      map['account_id'] = Variable<int>(accountId);
+    }
     map['date'] = Variable<DateTime>(date);
     if (!nullToAbsent || notes != null) {
       map['notes'] = Variable<String>(notes);
@@ -983,8 +985,12 @@ class TransactionsTableData extends DataClass
       id: Value(id),
       amount: Value(amount),
       type: Value(type),
-      categoryId: Value(categoryId),
-      accountId: Value(accountId),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
+      accountId: accountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(accountId),
       date: Value(date),
       notes: notes == null && nullToAbsent
           ? const Value.absent()
@@ -1001,8 +1007,8 @@ class TransactionsTableData extends DataClass
       id: serializer.fromJson<int>(json['id']),
       amount: serializer.fromJson<double>(json['amount']),
       type: serializer.fromJson<int>(json['type']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
-      accountId: serializer.fromJson<int>(json['accountId']),
+      categoryId: serializer.fromJson<int?>(json['categoryId']),
+      accountId: serializer.fromJson<int?>(json['accountId']),
       date: serializer.fromJson<DateTime>(json['date']),
       notes: serializer.fromJson<String?>(json['notes']),
     );
@@ -1014,8 +1020,8 @@ class TransactionsTableData extends DataClass
       'id': serializer.toJson<int>(id),
       'amount': serializer.toJson<double>(amount),
       'type': serializer.toJson<int>(type),
-      'categoryId': serializer.toJson<int>(categoryId),
-      'accountId': serializer.toJson<int>(accountId),
+      'categoryId': serializer.toJson<int?>(categoryId),
+      'accountId': serializer.toJson<int?>(accountId),
       'date': serializer.toJson<DateTime>(date),
       'notes': serializer.toJson<String?>(notes),
     };
@@ -1025,16 +1031,16 @@ class TransactionsTableData extends DataClass
     int? id,
     double? amount,
     int? type,
-    int? categoryId,
-    int? accountId,
+    Value<int?> categoryId = const Value.absent(),
+    Value<int?> accountId = const Value.absent(),
     DateTime? date,
     Value<String?> notes = const Value.absent(),
   }) => TransactionsTableData(
     id: id ?? this.id,
     amount: amount ?? this.amount,
     type: type ?? this.type,
-    categoryId: categoryId ?? this.categoryId,
-    accountId: accountId ?? this.accountId,
+    categoryId: categoryId.present ? categoryId.value : this.categoryId,
+    accountId: accountId.present ? accountId.value : this.accountId,
     date: date ?? this.date,
     notes: notes.present ? notes.value : this.notes,
   );
@@ -1087,8 +1093,8 @@ class TransactionsTableCompanion
   final Value<int> id;
   final Value<double> amount;
   final Value<int> type;
-  final Value<int> categoryId;
-  final Value<int> accountId;
+  final Value<int?> categoryId;
+  final Value<int?> accountId;
   final Value<DateTime> date;
   final Value<String?> notes;
   const TransactionsTableCompanion({
@@ -1104,14 +1110,12 @@ class TransactionsTableCompanion
     this.id = const Value.absent(),
     required double amount,
     required int type,
-    required int categoryId,
-    required int accountId,
+    this.categoryId = const Value.absent(),
+    this.accountId = const Value.absent(),
     required DateTime date,
     this.notes = const Value.absent(),
   }) : amount = Value(amount),
        type = Value(type),
-       categoryId = Value(categoryId),
-       accountId = Value(accountId),
        date = Value(date);
   static Insertable<TransactionsTableData> custom({
     Expression<int>? id,
@@ -1137,8 +1141,8 @@ class TransactionsTableCompanion
     Value<int>? id,
     Value<double>? amount,
     Value<int>? type,
-    Value<int>? categoryId,
-    Value<int>? accountId,
+    Value<int?>? categoryId,
+    Value<int?>? accountId,
     Value<DateTime>? date,
     Value<String?>? notes,
   }) {
@@ -1252,9 +1256,10 @@ class $RecurringPaymentsTableTable extends RecurringPaymentsTable
   late final GeneratedColumn<int> accountId = GeneratedColumn<int>(
     'account_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    $customConstraints: 'REFERENCES accounts_table(id) ON DELETE SET NULL',
   );
   static const VerificationMeta _categoryIdMeta = const VerificationMeta(
     'categoryId',
@@ -1263,9 +1268,10 @@ class $RecurringPaymentsTableTable extends RecurringPaymentsTable
   late final GeneratedColumn<int> categoryId = GeneratedColumn<int>(
     'category_id',
     aliasedName,
-    false,
+    true,
     type: DriftSqlType.int,
-    requiredDuringInsert: true,
+    requiredDuringInsert: false,
+    $customConstraints: 'REFERENCES categories_table(id) ON DELETE SET NULL',
   );
   static const VerificationMeta _frequencyMeta = const VerificationMeta(
     'frequency',
@@ -1368,16 +1374,12 @@ class $RecurringPaymentsTableTable extends RecurringPaymentsTable
         _accountIdMeta,
         accountId.isAcceptableOrUnknown(data['account_id']!, _accountIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_accountIdMeta);
     }
     if (data.containsKey('category_id')) {
       context.handle(
         _categoryIdMeta,
         categoryId.isAcceptableOrUnknown(data['category_id']!, _categoryIdMeta),
       );
-    } else if (isInserting) {
-      context.missing(_categoryIdMeta);
     }
     if (data.containsKey('frequency')) {
       context.handle(
@@ -1438,11 +1440,11 @@ class $RecurringPaymentsTableTable extends RecurringPaymentsTable
       accountId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}account_id'],
-      )!,
+      ),
       categoryId: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}category_id'],
-      )!,
+      ),
       frequency: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}frequency'],
@@ -1474,8 +1476,8 @@ class RecurringPaymentsTableData extends DataClass
   final String name;
   final double amount;
   final int type;
-  final int accountId;
-  final int categoryId;
+  final int? accountId;
+  final int? categoryId;
   final int frequency;
   final DateTime startDate;
   final DateTime? endDate;
@@ -1485,8 +1487,8 @@ class RecurringPaymentsTableData extends DataClass
     required this.name,
     required this.amount,
     required this.type,
-    required this.accountId,
-    required this.categoryId,
+    this.accountId,
+    this.categoryId,
     required this.frequency,
     required this.startDate,
     this.endDate,
@@ -1499,8 +1501,12 @@ class RecurringPaymentsTableData extends DataClass
     map['name'] = Variable<String>(name);
     map['amount'] = Variable<double>(amount);
     map['type'] = Variable<int>(type);
-    map['account_id'] = Variable<int>(accountId);
-    map['category_id'] = Variable<int>(categoryId);
+    if (!nullToAbsent || accountId != null) {
+      map['account_id'] = Variable<int>(accountId);
+    }
+    if (!nullToAbsent || categoryId != null) {
+      map['category_id'] = Variable<int>(categoryId);
+    }
     map['frequency'] = Variable<int>(frequency);
     map['start_date'] = Variable<DateTime>(startDate);
     if (!nullToAbsent || endDate != null) {
@@ -1518,8 +1524,12 @@ class RecurringPaymentsTableData extends DataClass
       name: Value(name),
       amount: Value(amount),
       type: Value(type),
-      accountId: Value(accountId),
-      categoryId: Value(categoryId),
+      accountId: accountId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(accountId),
+      categoryId: categoryId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryId),
       frequency: Value(frequency),
       startDate: Value(startDate),
       endDate: endDate == null && nullToAbsent
@@ -1541,8 +1551,8 @@ class RecurringPaymentsTableData extends DataClass
       name: serializer.fromJson<String>(json['name']),
       amount: serializer.fromJson<double>(json['amount']),
       type: serializer.fromJson<int>(json['type']),
-      accountId: serializer.fromJson<int>(json['accountId']),
-      categoryId: serializer.fromJson<int>(json['categoryId']),
+      accountId: serializer.fromJson<int?>(json['accountId']),
+      categoryId: serializer.fromJson<int?>(json['categoryId']),
       frequency: serializer.fromJson<int>(json['frequency']),
       startDate: serializer.fromJson<DateTime>(json['startDate']),
       endDate: serializer.fromJson<DateTime?>(json['endDate']),
@@ -1557,8 +1567,8 @@ class RecurringPaymentsTableData extends DataClass
       'name': serializer.toJson<String>(name),
       'amount': serializer.toJson<double>(amount),
       'type': serializer.toJson<int>(type),
-      'accountId': serializer.toJson<int>(accountId),
-      'categoryId': serializer.toJson<int>(categoryId),
+      'accountId': serializer.toJson<int?>(accountId),
+      'categoryId': serializer.toJson<int?>(categoryId),
       'frequency': serializer.toJson<int>(frequency),
       'startDate': serializer.toJson<DateTime>(startDate),
       'endDate': serializer.toJson<DateTime?>(endDate),
@@ -1571,8 +1581,8 @@ class RecurringPaymentsTableData extends DataClass
     String? name,
     double? amount,
     int? type,
-    int? accountId,
-    int? categoryId,
+    Value<int?> accountId = const Value.absent(),
+    Value<int?> categoryId = const Value.absent(),
     int? frequency,
     DateTime? startDate,
     Value<DateTime?> endDate = const Value.absent(),
@@ -1582,8 +1592,8 @@ class RecurringPaymentsTableData extends DataClass
     name: name ?? this.name,
     amount: amount ?? this.amount,
     type: type ?? this.type,
-    accountId: accountId ?? this.accountId,
-    categoryId: categoryId ?? this.categoryId,
+    accountId: accountId.present ? accountId.value : this.accountId,
+    categoryId: categoryId.present ? categoryId.value : this.categoryId,
     frequency: frequency ?? this.frequency,
     startDate: startDate ?? this.startDate,
     endDate: endDate.present ? endDate.value : this.endDate,
@@ -1662,8 +1672,8 @@ class RecurringPaymentsTableCompanion
   final Value<String> name;
   final Value<double> amount;
   final Value<int> type;
-  final Value<int> accountId;
-  final Value<int> categoryId;
+  final Value<int?> accountId;
+  final Value<int?> categoryId;
   final Value<int> frequency;
   final Value<DateTime> startDate;
   final Value<DateTime?> endDate;
@@ -1685,8 +1695,8 @@ class RecurringPaymentsTableCompanion
     required String name,
     required double amount,
     required int type,
-    required int accountId,
-    required int categoryId,
+    this.accountId = const Value.absent(),
+    this.categoryId = const Value.absent(),
     required int frequency,
     required DateTime startDate,
     this.endDate = const Value.absent(),
@@ -1694,8 +1704,6 @@ class RecurringPaymentsTableCompanion
   }) : name = Value(name),
        amount = Value(amount),
        type = Value(type),
-       accountId = Value(accountId),
-       categoryId = Value(categoryId),
        frequency = Value(frequency),
        startDate = Value(startDate);
   static Insertable<RecurringPaymentsTableData> custom({
@@ -1729,8 +1737,8 @@ class RecurringPaymentsTableCompanion
     Value<String>? name,
     Value<double>? amount,
     Value<int>? type,
-    Value<int>? accountId,
-    Value<int>? categoryId,
+    Value<int?>? accountId,
+    Value<int?>? categoryId,
     Value<int>? frequency,
     Value<DateTime>? startDate,
     Value<DateTime?>? endDate,
@@ -2261,8 +2269,8 @@ typedef $$TransactionsTableTableCreateCompanionBuilder =
       Value<int> id,
       required double amount,
       required int type,
-      required int categoryId,
-      required int accountId,
+      Value<int?> categoryId,
+      Value<int?> accountId,
       required DateTime date,
       Value<String?> notes,
     });
@@ -2271,8 +2279,8 @@ typedef $$TransactionsTableTableUpdateCompanionBuilder =
       Value<int> id,
       Value<double> amount,
       Value<int> type,
-      Value<int> categoryId,
-      Value<int> accountId,
+      Value<int?> categoryId,
+      Value<int?> accountId,
       Value<DateTime> date,
       Value<String?> notes,
     });
@@ -2443,8 +2451,8 @@ class $$TransactionsTableTableTableManager
                 Value<int> id = const Value.absent(),
                 Value<double> amount = const Value.absent(),
                 Value<int> type = const Value.absent(),
-                Value<int> categoryId = const Value.absent(),
-                Value<int> accountId = const Value.absent(),
+                Value<int?> categoryId = const Value.absent(),
+                Value<int?> accountId = const Value.absent(),
                 Value<DateTime> date = const Value.absent(),
                 Value<String?> notes = const Value.absent(),
               }) => TransactionsTableCompanion(
@@ -2461,8 +2469,8 @@ class $$TransactionsTableTableTableManager
                 Value<int> id = const Value.absent(),
                 required double amount,
                 required int type,
-                required int categoryId,
-                required int accountId,
+                Value<int?> categoryId = const Value.absent(),
+                Value<int?> accountId = const Value.absent(),
                 required DateTime date,
                 Value<String?> notes = const Value.absent(),
               }) => TransactionsTableCompanion.insert(
@@ -2509,8 +2517,8 @@ typedef $$RecurringPaymentsTableTableCreateCompanionBuilder =
       required String name,
       required double amount,
       required int type,
-      required int accountId,
-      required int categoryId,
+      Value<int?> accountId,
+      Value<int?> categoryId,
       required int frequency,
       required DateTime startDate,
       Value<DateTime?> endDate,
@@ -2522,8 +2530,8 @@ typedef $$RecurringPaymentsTableTableUpdateCompanionBuilder =
       Value<String> name,
       Value<double> amount,
       Value<int> type,
-      Value<int> accountId,
-      Value<int> categoryId,
+      Value<int?> accountId,
+      Value<int?> categoryId,
       Value<int> frequency,
       Value<DateTime> startDate,
       Value<DateTime?> endDate,
@@ -2744,8 +2752,8 @@ class $$RecurringPaymentsTableTableTableManager
                 Value<String> name = const Value.absent(),
                 Value<double> amount = const Value.absent(),
                 Value<int> type = const Value.absent(),
-                Value<int> accountId = const Value.absent(),
-                Value<int> categoryId = const Value.absent(),
+                Value<int?> accountId = const Value.absent(),
+                Value<int?> categoryId = const Value.absent(),
                 Value<int> frequency = const Value.absent(),
                 Value<DateTime> startDate = const Value.absent(),
                 Value<DateTime?> endDate = const Value.absent(),
@@ -2768,8 +2776,8 @@ class $$RecurringPaymentsTableTableTableManager
                 required String name,
                 required double amount,
                 required int type,
-                required int accountId,
-                required int categoryId,
+                Value<int?> accountId = const Value.absent(),
+                Value<int?> categoryId = const Value.absent(),
                 required int frequency,
                 required DateTime startDate,
                 Value<DateTime?> endDate = const Value.absent(),

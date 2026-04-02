@@ -2,8 +2,9 @@ import 'package:finflow_app/core/theme/finflow_colors.dart';
 import 'package:finflow_app/core/theme/finflow_spacing.dart';
 import 'package:finflow_app/core/theme/finflow_typography.dart';
 import 'package:finflow_app/features/categories/presentation/providers/categories_providers.dart';
-import 'package:finflow_app/features/categories/presentation/widgets/add_category_sheet.dart';
 import 'package:finflow_app/features/categories/presentation/widgets/category_chip.dart';
+import 'package:finflow_app/features/categories/presentation/widgets/category_sheet.dart';
+import 'package:finflow_app/features/categories/presentation/widgets/delete_category_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -28,7 +29,7 @@ class CategoriesScreen extends ConsumerWidget {
           onPressed: () {
             showModalBottomSheet(
               context: context,
-              builder: (context) => const AddCategorySheet(),
+              builder: (context) => const CategorySheet(),
             );
           },
         ),
@@ -50,7 +51,19 @@ class CategoriesScreen extends ConsumerWidget {
                         icon: c.icon,
                         label: c.name,
                         isSelected: c.isDefault,
-                        onTap: () {},
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => CategorySheet(category: c),
+                          );
+                        },
+                        onLongPress: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                DeleteCategoryDialog(category: c),
+                          );
+                        },
                       ),
                   ],
                 )

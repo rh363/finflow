@@ -5,7 +5,7 @@ import 'package:finflow_app/core/theme/finflow_spacing.dart';
 import 'package:finflow_app/core/theme/finflow_typography.dart';
 import 'package:flutter/material.dart';
 
-enum FFButtonVariant { primary, secondary }
+enum FFButtonVariant { primary, secondary, tertiary, destructive }
 
 class FFButton extends StatelessWidget {
   final String label;
@@ -19,12 +19,39 @@ class FFButton extends StatelessWidget {
     this.variant = FFButtonVariant.primary,
   });
 
-  bool get _isPrimary => variant == FFButtonVariant.primary;
-
   @override
   Widget build(BuildContext context) {
     final colors = context.ffColors;
-
+    final bgColor = switch (variant) {
+      FFButtonVariant.primary => colors.accentDefault,
+      FFButtonVariant.destructive => colors.semanticNegative,
+      _ => Colors.transparent,
+    };
+    final border = switch (variant) {
+      FFButtonVariant.secondary => Border.all(color: colors.borderDefault),
+      _ => null,
+    };
+    final boxShadow = switch (variant) {
+      FFButtonVariant.primary => FFShadows.accent,
+      _ => null,
+    };
+    final padding = switch (variant) {
+      FFButtonVariant.primary ||
+      FFButtonVariant.destructive => const EdgeInsets.symmetric(
+        vertical: FFSpacing.lg,
+        horizontal: FFSpacing.xxl,
+      ),
+      _ => const EdgeInsets.symmetric(
+        vertical: FFSpacing.md,
+        horizontal: FFSpacing.xl,
+      ),
+    };
+    final textColor = switch (variant) {
+      FFButtonVariant.primary => colors.textOnAccent,
+      FFButtonVariant.destructive => colors.textOnAccent,
+      FFButtonVariant.secondary => colors.textPrimary,
+      FFButtonVariant.tertiary => colors.accentDefault,
+    };
     return Opacity(
       opacity: onPressed == null ? 0.4 : 1.0,
       child: InkWell(
@@ -32,26 +59,16 @@ class FFButton extends StatelessWidget {
         borderRadius: FFRadius.sm,
         child: Ink(
           decoration: BoxDecoration(
-            color: _isPrimary ? colors.accentDefault : Colors.transparent,
+            color: bgColor,
             borderRadius: FFRadius.sm,
-            border: _isPrimary ? null : Border.all(color: colors.borderDefault),
-            boxShadow: _isPrimary ? FFShadows.accent : null,
+            border: border,
+            boxShadow: boxShadow,
           ),
-          padding: _isPrimary
-              ? const EdgeInsets.symmetric(
-                  vertical: FFSpacing.lg,
-                  horizontal: FFSpacing.xxl,
-                )
-              : const EdgeInsets.symmetric(
-                  vertical: FFSpacing.md,
-                  horizontal: FFSpacing.xl,
-                ),
+          padding: padding,
           child: Center(
             child: Text(
               label,
-              style: FFTypography.headingSm.copyWith(
-                color: _isPrimary ? colors.textOnAccent : colors.textPrimary,
-              ),
+              style: FFTypography.headingSm.copyWith(color: textColor),
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:finflow_app/core/theme/finflow_colors.dart';
 import 'package:finflow_app/core/theme/finflow_radius.dart';
+import 'package:finflow_app/core/theme/finflow_spacing.dart';
 import 'package:finflow_app/core/theme/finflow_typography.dart';
 import 'package:flutter/material.dart';
 
@@ -7,13 +8,15 @@ class CategoryChip extends StatelessWidget {
   final String icon;
   final String label;
   final bool isSelected;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   const CategoryChip({
     required this.icon,
     required this.label,
     required this.isSelected,
-    required this.onTap,
+    this.onTap,
+    this.onLongPress,
     super.key,
   });
 
@@ -22,6 +25,7 @@ class CategoryChip extends StatelessWidget {
     final colors = context.ffColors;
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Container(
         decoration: BoxDecoration(
           color: isSelected ? colors.accentBg : colors.bgCardAlt,
@@ -32,7 +36,10 @@ class CategoryChip extends StatelessWidget {
           borderRadius: FFRadius.sm,
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+          padding: const EdgeInsets.symmetric(
+            vertical: FFSpacing.md,
+            horizontal: FFSpacing.xs,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

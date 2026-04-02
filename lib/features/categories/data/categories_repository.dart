@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:finflow_app/core/database/app_database.dart';
 import 'package:finflow_app/core/database/daos/categories_dao.dart';
 import 'package:finflow_app/features/categories/domain/category.dart';
@@ -20,6 +21,22 @@ class CategoriesRepository {
   }) {
     return _dao.insertCategory(
       CategoriesTableCompanion.insert(name: name, icon: icon, color: color),
+    );
+  }
+
+  Future<void> update({
+    required int id,
+    required String name,
+    required String icon,
+    required int color,
+  }) {
+    return _dao.updateCategory(
+      CategoriesTableCompanion(
+        id: Value(id),
+        name: Value(name),
+        icon: Value(icon),
+        color: Value(color),
+      ),
     );
   }
 

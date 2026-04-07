@@ -23,18 +23,18 @@ class CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = context.ffColors;
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Container(
-        decoration: BoxDecoration(
-          color: isSelected ? colors.accentBg : colors.bgCardAlt,
-          border: Border.all(
-            width: isSelected ? 2 : 0,
-            color: isSelected ? colors.accentDefault : Colors.transparent,
-          ),
-          borderRadius: FFRadius.sm,
-        ),
+    return Material(
+      color: isSelected ? colors.accentBg : colors.bgCardAlt,
+      shape: RoundedRectangleBorder(
+        borderRadius: FFRadius.sm,
+        side: isSelected
+            ? BorderSide(width: 2, color: colors.accentDefault)
+            : BorderSide.none,
+      ),
+      child: InkWell(
+        onTap: onTap,
+        onLongPress: onLongPress,
+        borderRadius: FFRadius.sm,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: FFSpacing.md,
@@ -53,7 +53,7 @@ class CategoryChip extends StatelessWidget {
                       : colors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
-                overflow: TextOverflow.ellipsis, // ← tronca il testo lungo
+                overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),
             ],

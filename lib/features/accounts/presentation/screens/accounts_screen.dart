@@ -28,6 +28,8 @@ class AccountsScreen extends ConsumerWidget {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            useRootNavigator: true,
+            isScrollControlled: true,
             builder: (context) => AccountFormSheet(),
           );
         },
@@ -47,6 +49,8 @@ class AccountsScreen extends ConsumerWidget {
                       currency: a.currency,
                       onTap: () => showModalBottomSheet(
                         context: context,
+                        useRootNavigator: true,
+                        isScrollControlled: true,
                         builder: (context) => AccountFormSheet(account: a),
                       ),
                       onLongPress: () => showDialog(

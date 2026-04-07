@@ -29,6 +29,8 @@ class CategoriesScreen extends ConsumerWidget {
           onPressed: () {
             showModalBottomSheet(
               context: context,
+              useRootNavigator: true,
+              isScrollControlled: true,
               builder: (context) => const CategoryFormSheet(),
             );
           },
@@ -54,6 +56,8 @@ class CategoriesScreen extends ConsumerWidget {
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
+                            useRootNavigator: true,
+                            isScrollControlled: true,
                             builder: (context) =>
                                 CategoryFormSheet(category: c),
                           );

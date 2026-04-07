@@ -41,7 +41,7 @@ class CategoriesRepository {
   }
 
   Future<void> delete(String id) {
-    return _dao.deleteCategory(int.parse(id));
+    return _dao.deleteCategory(.parse(id));
   }
 
   static Category _toEntity(CategoriesTableData row) {

@@ -1,3 +1,4 @@
+import 'package:finflow_app/core/constants/emoji_constants.dart';
 import 'package:finflow_app/core/theme/finflow_colors.dart';
 import 'package:finflow_app/core/theme/finflow_radius.dart';
 import 'package:finflow_app/core/theme/finflow_spacing.dart';
@@ -9,35 +10,21 @@ import 'package:finflow_app/features/categories/presentation/providers/categorie
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CategorySheet extends ConsumerStatefulWidget {
+class CategoryFormSheet extends ConsumerStatefulWidget {
   final Category? category;
 
-  const CategorySheet({this.category, super.key});
+  const CategoryFormSheet({this.category, super.key});
 
   @override
-  ConsumerState<CategorySheet> createState() => _CategorySheetState();
+  ConsumerState<CategoryFormSheet> createState() => _CategoryFormSheetState();
 }
 
-class _CategorySheetState extends ConsumerState<CategorySheet> {
+class _CategoryFormSheetState extends ConsumerState<CategoryFormSheet> {
   final _nameController = TextEditingController();
   String _selectedEmoji = '🏠';
   bool _isNameValid = false;
 
-  static const _emojis = [
-    '🏠',
-    '🚗',
-    '🍕',
-    '💻',
-    '🎮',
-    '💊',
-    '💰',
-    '📚',
-    '⚡',
-    '🛒',
-    '🎵',
-    '👕',
-    '✈️',
-  ];
+  static const _emojis = EmojiConstants.categoryEmojis;
 
   bool _isSelectedEmoji(String emoji) => _selectedEmoji == emoji;
 

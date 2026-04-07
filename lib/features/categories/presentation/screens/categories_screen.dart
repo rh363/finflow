@@ -3,7 +3,7 @@ import 'package:finflow_app/core/theme/finflow_spacing.dart';
 import 'package:finflow_app/core/theme/finflow_typography.dart';
 import 'package:finflow_app/features/categories/presentation/providers/categories_providers.dart';
 import 'package:finflow_app/features/categories/presentation/widgets/category_chip.dart';
-import 'package:finflow_app/features/categories/presentation/widgets/category_sheet.dart';
+import 'package:finflow_app/features/categories/presentation/widgets/category_form_sheet.dart';
 import 'package:finflow_app/features/categories/presentation/widgets/delete_category_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +29,7 @@ class CategoriesScreen extends ConsumerWidget {
           onPressed: () {
             showModalBottomSheet(
               context: context,
-              builder: (context) => const CategorySheet(),
+              builder: (context) => const CategoryFormSheet(),
             );
           },
         ),
@@ -54,7 +54,8 @@ class CategoriesScreen extends ConsumerWidget {
                         onTap: () {
                           showModalBottomSheet(
                             context: context,
-                            builder: (context) => CategorySheet(category: c),
+                            builder: (context) =>
+                                CategoryFormSheet(category: c),
                           );
                         },
                         onLongPress: () {

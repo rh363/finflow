@@ -1,4 +1,5 @@
 import 'package:finflow_app/core/widgets/ff_bottom_nav.dart';
+import 'package:finflow_app/features/accounts/presentation/screens/accounts_screen.dart';
 import 'package:finflow_app/features/calendar/presentation/screens/calendar_screen.dart';
 import 'package:finflow_app/features/categories/presentation/screens/categories_screen.dart';
 import 'package:finflow_app/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -20,7 +21,7 @@ class AppRouter {
   }
 
   static final router = GoRouter(
-    initialLocation: '/settings/categories',
+    initialLocation: '/settings/accounts',
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -52,6 +53,10 @@ class AppRouter {
               GoRoute(
                 path: 'categories',
                 builder: (context, state) => const CategoriesScreen(),
+              ),
+              GoRoute(
+                path: 'accounts',
+                builder: (context, state) => const AccountsScreen(),
               ),
             ],
           ),

@@ -8,10 +8,12 @@ class FFInput extends StatefulWidget {
   final String? hint;
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
+  final TextInputType? textInputType;
 
   const FFInput({
     this.label,
     this.hint,
+    this.textInputType,
     this.onChanged,
     this.controller,
     super.key,
@@ -70,6 +72,7 @@ class _FFInputState extends State<FFInput> {
             focusNode: _focusNode,
             onChanged: widget.onChanged,
             style: FFTypography.bodyMd.copyWith(color: colors.textPrimary),
+            keyboardType: widget.textInputType,
             decoration: InputDecoration(
               hintText: widget.hint,
               hintStyle: FFTypography.bodyMd.copyWith(color: colors.textMuted),

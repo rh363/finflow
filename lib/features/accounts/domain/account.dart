@@ -15,3 +15,12 @@ abstract class Account with _$Account {
     required String icon,
   }) = _Account;
 }
+
+extension AccountTypeLabel on AccountType {
+  String get label => switch (this) {
+    AccountType.checking => 'Conto corrente',
+    AccountType.creditCard => 'Carta di credito',
+    AccountType.cash => 'Contanti',
+    AccountType.saving => 'Risparmio',
+  };
+}

@@ -16,3 +16,10 @@ abstract class Transaction with _$Transaction {
     String? notes,
   }) = _Transaction;
 }
+
+extension TransactionTypeLabel on TransactionType {
+  String get label => switch (this) {
+    TransactionType.income => "Entrate",
+    TransactionType.expense => "Uscite",
+  };
+}

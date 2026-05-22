@@ -9,6 +9,9 @@ class FFInput extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
   final TextInputType? textInputType;
+  final int? maxLength;
+  final int minLines;
+  final int maxLines;
 
   const FFInput({
     this.label,
@@ -16,6 +19,9 @@ class FFInput extends StatefulWidget {
     this.textInputType,
     this.onChanged,
     this.controller,
+    this.maxLength,
+    this.minLines = 1,
+    this.maxLines = 1,
     super.key,
   });
 
@@ -73,6 +79,9 @@ class _FFInputState extends State<FFInput> {
             onChanged: widget.onChanged,
             style: FFTypography.bodyMd.copyWith(color: colors.textPrimary),
             keyboardType: widget.textInputType,
+            maxLength: widget.maxLength,
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
             decoration: InputDecoration(
               hintText: widget.hint,
               hintStyle: FFTypography.bodyMd.copyWith(color: colors.textMuted),

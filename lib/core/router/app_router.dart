@@ -21,7 +21,7 @@ class AppRouter {
   }
 
   static final router = GoRouter(
-    initialLocation: '/settings/accounts',
+    initialLocation: '/transactions',
     routes: [
       ShellRoute(
         builder: (context, state, child) {

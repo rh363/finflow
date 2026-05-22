@@ -24,17 +24,17 @@ class FFBottomNav extends StatelessWidget {
         const NavigationDestination(
           icon: Icon(Icons.receipt_long_outlined),
           selectedIcon: Icon(Icons.receipt_long),
-          label: 'Transactions',
+          label: 'Transazioni',
         ),
         const NavigationDestination(
           icon: Icon(Icons.calendar_month_outlined),
           selectedIcon: Icon(Icons.calendar_month),
-          label: 'Calendar',
+          label: 'Calendario',
         ),
         const NavigationDestination(
           icon: Icon(Icons.settings_outlined),
           selectedIcon: Icon(Icons.settings),
-          label: 'Settings',
+          label: 'Impostazioni',
         ),
       ],
     );

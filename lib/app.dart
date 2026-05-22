@@ -2,6 +2,7 @@ import 'package:finflow_app/core/router/app_router.dart';
 import 'package:finflow_app/core/theme/finflow_theme.dart';
 import 'package:finflow_app/core/widgets/widget_gallery_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class FinFlowApp extends StatelessWidget {
   const FinFlowApp({super.key});
@@ -12,6 +13,8 @@ class FinFlowApp extends StatelessWidget {
       title: 'FinFlow',
       theme: FFTheme.glacier(),
       routerConfig: AppRouter.router,
+      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      supportedLocales: const [Locale('it', 'IT')],
     );
   }
 }

@@ -54,12 +54,15 @@ dependencies:
 
   # Localization & formatting
   intl: ^0.20.2
+  flutter_localizations:
+    sdk: flutter
 
   # Utilities
   path_provider: ^2.1.5
   path: ^1.9.1
   uuid: ^4.5.1
   csv: ^8.0.0
+  collection: ^1.19.1
 
 dev_dependencies:
   flutter_test:

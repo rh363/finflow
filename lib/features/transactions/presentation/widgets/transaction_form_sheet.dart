@@ -63,6 +63,30 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
     super.dispose();
   }
 
+  Future<void> _openCategoryForm() async {
+    final newId = await showModalBottomSheet<String>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (context) => const CategoryFormSheet(),
+    );
+    if (newId != null && mounted) {
+      setState(() => _selectedCategory = newId);
+    }
+  }
+
+  Future<void> _openAccountForm() async {
+    final newId = await showModalBottomSheet<String>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (context) => const AccountFormSheet(),
+    );
+    if (newId != null && mounted) {
+      setState(() => _selectedAccount = newId);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final colors = context.ffColors;
@@ -135,33 +159,41 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
             ),
             asyncCategories.when(
               data: (categories) => categories.isNotEmpty
-                  ? DropdownButtonFormField<String>(
-                      initialValue: _selectedCategory,
-                      decoration: InputDecoration(
-                        labelText: 'Categoria',
-                        labelStyle: FFTypography.caption.copyWith(
-                          color: colors.textMuted,
-                        ),
-                      ),
-                      items: [
-                        for (final c in categories)
-                          DropdownMenuItem(
-                            value: c.id,
-                            child: Text('${c.icon} ${c.name}'),
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedCategory,
+                            decoration: InputDecoration(
+                              labelText: 'Categoria',
+                              labelStyle: FFTypography.caption.copyWith(
+                                color: colors.textMuted,
+                              ),
+                            ),
+                            items: [
+                              for (final c in categories)
+                                DropdownMenuItem(
+                                  value: c.id,
+                                  child: Text('${c.icon} ${c.name}'),
+                                ),
+                            ],
+                            onChanged: (value) =>
+                                setState(() => _selectedCategory = value),
                           ),
+                        ),
+                        const SizedBox(width: FFSpacing.sm),
+                        IconButton(
+                          tooltip: 'Nuova categoria',
+                          onPressed: _openCategoryForm,
+                          icon: Icon(Icons.add, color: colors.accentDefault),
+                        ),
                       ],
-                      onChanged: (value) =>
-                          setState(() => _selectedCategory = value),
                     )
                   : FFButton(
                       label: "Crea una categoria",
                       variant: FFButtonVariant.secondary,
-                      onPressed: () => showModalBottomSheet(
-                        context: context,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        builder: (context) => const CategoryFormSheet(),
-                      ),
+                      onPressed: _openCategoryForm,
                     ),
               error: (err, stack) => Center(
                 child: Column(
@@ -187,33 +219,41 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
             ),
             asyncAccounts.when(
               data: (accounts) => accounts.isNotEmpty
-                  ? DropdownButtonFormField<String>(
-                      initialValue: _selectedAccount,
-                      decoration: InputDecoration(
-                        labelText: 'Conto',
-                        labelStyle: FFTypography.caption.copyWith(
-                          color: colors.textMuted,
-                        ),
-                      ),
-                      items: [
-                        for (final c in accounts)
-                          DropdownMenuItem(
-                            value: c.id,
-                            child: Text('${c.icon} ${c.name}'),
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: DropdownButtonFormField<String>(
+                            initialValue: _selectedAccount,
+                            decoration: InputDecoration(
+                              labelText: 'Conto',
+                              labelStyle: FFTypography.caption.copyWith(
+                                color: colors.textMuted,
+                              ),
+                            ),
+                            items: [
+                              for (final c in accounts)
+                                DropdownMenuItem(
+                                  value: c.id,
+                                  child: Text('${c.icon} ${c.name}'),
+                                ),
+                            ],
+                            onChanged: (value) =>
+                                setState(() => _selectedAccount = value),
                           ),
+                        ),
+                        const SizedBox(width: FFSpacing.sm),
+                        IconButton(
+                          tooltip: 'Nuovo conto',
+                          onPressed: _openAccountForm,
+                          icon: Icon(Icons.add, color: colors.accentDefault),
+                        ),
                       ],
-                      onChanged: (value) =>
-                          setState(() => _selectedAccount = value),
                     )
                   : FFButton(
                       label: "Crea un conto",
                       variant: FFButtonVariant.secondary,
-                      onPressed: () => showModalBottomSheet(
-                        context: context,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        builder: (context) => const AccountFormSheet(),
-                      ),
+                      onPressed: _openAccountForm,
                     ),
               error: (err, stack) => Center(
                 child: Column(
@@ -253,18 +293,14 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
                       final repo = ref.read(transactionsRepositoryProvider);
                       if (_isInEditMode) {
                         repo.update(
-                          id: .parse(widget.transaction!.id),
+                          id: widget.transaction!.id,
                           amount: .parse(
                             _amountController.text.replaceAll(',', '.'),
                           ),
                           type: _selectedType,
                           date: _selectedDate,
-                          categoryId: _selectedCategory != null
-                              ? .parse(_selectedCategory!)
-                              : null,
-                          accountId: _selectedAccount != null
-                              ? .parse(_selectedAccount!)
-                              : null,
+                          categoryId: _selectedCategory,
+                          accountId: _selectedAccount,
                           notes: _noteController.text.isEmpty
                               ? null
                               : _noteController.text,
@@ -276,12 +312,8 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
                           ),
                           type: _selectedType,
                           date: _selectedDate,
-                          categoryId: _selectedCategory != null
-                              ? .parse(_selectedCategory!)
-                              : null,
-                          accountId: _selectedAccount != null
-                              ? .parse(_selectedAccount!)
-                              : null,
+                          categoryId: _selectedCategory,
+                          accountId: _selectedAccount,
                           notes: _noteController.text.isEmpty
                               ? null
                               : _noteController.text,

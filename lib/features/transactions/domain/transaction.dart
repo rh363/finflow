@@ -10,8 +10,8 @@ abstract class Transaction with _$Transaction {
     required String id,
     required double amount,
     required TransactionType type,
-    required String categoryId,
-    required String accountId,
+    String? categoryId,
+    String? accountId,
     required DateTime date,
     String? notes,
   }) = _Transaction;

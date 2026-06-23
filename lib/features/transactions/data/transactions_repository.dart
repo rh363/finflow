@@ -16,40 +16,43 @@ class TransactionsRepository {
     required TransactionType type,
     required DateTime date,
     String? notes,
-    int? categoryId,
-    int? accountId,
+    String? categoryId,
+    String? accountId,
   }) => _dao.insertTransaction(
     TransactionsTableCompanion.insert(
       amount: amount,
       type: type.index,
       date: date,
       notes: Value(notes),
-      categoryId: Value(categoryId),
-      accountId: Value(accountId),
+      categoryId: Value(_toInt(categoryId)),
+      accountId: Value(_toInt(accountId)),
     ),
   );
 
   Future<void> update({
-    required int id,
+    required String id,
     required double amount,
     required TransactionType type,
     required DateTime date,
     String? notes,
-    int? categoryId,
-    int? accountId,
+    String? categoryId,
+    String? accountId,
   }) => _dao.updateTransaction(
     TransactionsTableCompanion(
-      id: Value(id),
+      id: Value(int.parse(id)),
       amount: Value(amount),
       type: Value(type.index),
       date: Value(date),
       notes: Value(notes),
-      categoryId: Value(categoryId),
-      accountId: Value(accountId),
+      categoryId: Value(_toInt(categoryId)),
+      accountId: Value(_toInt(accountId)),
     ),
   );
 
-  Future<void> delete(int id) => _dao.deleteTransaction(id);
+  Future<void> delete(String id) => _dao.deleteTransaction(int.parse(id));
+
+  /// Converte una FK di dominio (String, nullable) nell'int del DB.
+  static int? _toInt(String? id) => id == null ? null : int.tryParse(id);
 
   static Transaction _toEntity(TransactionsTableData row) => Transaction(
     id: row.id.toString(),
@@ -57,7 +60,7 @@ class TransactionsRepository {
     date: row.date,
     notes: row.notes,
     type: TransactionType.values[row.type],
-    categoryId: row.categoryId.toString(),
-    accountId: row.accountId.toString(),
+    categoryId: row.categoryId?.toString(),
+    accountId: row.accountId?.toString(),
   );
 }

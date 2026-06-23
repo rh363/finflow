@@ -31,7 +31,7 @@ class DeleteTransactionDialog extends ConsumerWidget {
           label: "Elimina",
           variant: FFButtonVariant.destructive,
           onPressed: () {
-            ref.read(transactionsRepositoryProvider).delete(.parse(item.id));
+            ref.read(transactionsRepositoryProvider).delete(item.id);
             Navigator.pop(context);
           },
         ),

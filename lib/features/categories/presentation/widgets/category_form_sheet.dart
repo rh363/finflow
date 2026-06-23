@@ -133,7 +133,7 @@ class _CategoryFormSheetState extends ConsumerState<CategoryFormSheet> {
                 label: "Salva",
                 variant: FFButtonVariant.primary,
                 onPressed: _isNameValid
-                    ? () {
+                    ? () async {
                         final repo = ref.read(categoriesRepositoryProvider);
                         if (_isInEditMode) {
                           final c = widget.category!;
@@ -143,14 +143,17 @@ class _CategoryFormSheetState extends ConsumerState<CategoryFormSheet> {
                             icon: _selectedEmoji,
                             color: colors.bgCardAlt.hashCode,
                           );
+                          if (mounted) Navigator.pop(context);
                         } else {
-                          repo.add(
+                          final newId = await repo.add(
                             name: _nameController.text,
                             icon: _selectedEmoji,
                             color: colors.bgCardAlt.hashCode,
                           );
+                          if (context.mounted) {
+                            Navigator.pop(context, newId.toString());
+                          }
                         }
-                        Navigator.pop(context);
                       }
                     : null,
               ),

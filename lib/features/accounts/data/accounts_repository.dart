@@ -12,7 +12,7 @@ class AccountsRepository {
     return _dao.watchAllAccounts().map((rows) => rows.map(_toEntity).toList());
   }
 
-  Future<void> add({
+  Future<int> add({
     required String name,
     required String currency,
     required String icon,

@@ -193,7 +193,7 @@ class _AccountFormSheetState extends ConsumerState<AccountFormSheet> {
                 label: "Salva",
                 variant: FFButtonVariant.primary,
                 onPressed: _isFormValid
-                    ? () {
+                    ? () async {
                         final repo = ref.read(accountsRepositoryProvider);
                         if (_isInEditMode) {
                           final a = widget.account!;
@@ -207,8 +207,9 @@ class _AccountFormSheetState extends ConsumerState<AccountFormSheet> {
                             ),
                             type: _selectedType,
                           );
+                          if (mounted) Navigator.pop(context);
                         } else {
-                          repo.add(
+                          final newId = await repo.add(
                             name: _nameController.text,
                             currency: _selectedCurrency,
                             icon: _selectedIcon,
@@ -217,8 +218,10 @@ class _AccountFormSheetState extends ConsumerState<AccountFormSheet> {
                             ),
                             type: _selectedType,
                           );
+                          if (context.mounted) {
+                            Navigator.pop(context, newId.toString());
+                          }
                         }
-                        Navigator.pop(context);
                       }
                     : null,
               ),

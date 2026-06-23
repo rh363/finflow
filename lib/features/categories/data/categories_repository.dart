@@ -14,7 +14,7 @@ class CategoriesRepository {
     );
   }
 
-  Future<void> add({
+  Future<int> add({
     required String name,
     required String icon,
     required int color,

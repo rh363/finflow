@@ -38,6 +38,12 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
 
   bool get _isFormValid => _isAmountValid;
 
+  /// Difesa UI: un [DropdownButtonFormField] crasha se il suo value non è tra
+  /// gli item. Se la categoria/conto collegato non è più disponibile (rimosso,
+  /// dato legacy, ecc.) ritorno null → il dropdown mostra vuoto invece di crashare.
+  String? _validValue(String? id, Iterable<String> available) =>
+      available.contains(id) ? id : null;
+
   @override
   void initState() {
     super.initState();
@@ -164,7 +170,10 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            initialValue: _selectedCategory,
+                            initialValue: _validValue(
+                              _selectedCategory,
+                              categories.map((c) => c.id),
+                            ),
                             decoration: InputDecoration(
                               labelText: 'Categoria',
                               labelStyle: FFTypography.caption.copyWith(
@@ -224,7 +233,10 @@ class _TransactionFormSheetState extends ConsumerState<TransactionFormSheet> {
                       children: [
                         Expanded(
                           child: DropdownButtonFormField<String>(
-                            initialValue: _selectedAccount,
+                            initialValue: _validValue(
+                              _selectedAccount,
+                              accounts.map((c) => c.id),
+                            ),
                             decoration: InputDecoration(
                               labelText: 'Conto',
                               labelStyle: FFTypography.caption.copyWith(

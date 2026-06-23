@@ -14,7 +14,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class AccountFormSheet extends ConsumerStatefulWidget {
   final Account? account;
 
-  AccountFormSheet({this.account, super.key});
+  const AccountFormSheet({this.account, super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

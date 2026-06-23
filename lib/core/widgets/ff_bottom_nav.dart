@@ -27,6 +27,11 @@ class FFBottomNav extends StatelessWidget {
           label: 'Transazioni',
         ),
         const NavigationDestination(
+          icon: Icon(Icons.event_repeat_outlined),
+          selectedIcon: Icon(Icons.event_repeat),
+          label: 'Ricorrenti',
+        ),
+        const NavigationDestination(
           icon: Icon(Icons.calendar_month_outlined),
           selectedIcon: Icon(Icons.calendar_month),
           label: 'Calendario',

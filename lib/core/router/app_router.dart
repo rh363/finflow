@@ -3,6 +3,7 @@ import 'package:finflow_app/features/accounts/presentation/screens/accounts_scre
 import 'package:finflow_app/features/calendar/presentation/screens/calendar_screen.dart';
 import 'package:finflow_app/features/categories/presentation/screens/categories_screen.dart';
 import 'package:finflow_app/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:finflow_app/features/recurring/presentation/screens/recurring_screen.dart';
 import 'package:finflow_app/features/settings/presentation/screens/settings_screen.dart';
 import 'package:finflow_app/features/transactions/presentation/screens/transactions_screen.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class AppRouter {
   static const _paths = [
     '/dashboard',
     '/transactions',
+    '/recurring',
     '/calendar',
     '/settings',
   ];
@@ -21,7 +23,7 @@ class AppRouter {
   }
 
   static final router = GoRouter(
-    initialLocation: '/settings',
+    initialLocation: '/recurring',
     routes: [
       ShellRoute(
         builder: (context, state, child) {
@@ -41,6 +43,10 @@ class AppRouter {
           GoRoute(
             path: '/transactions',
             builder: (context, state) => const TransactionsScreen(),
+          ),
+          GoRoute(
+            path: '/recurring',
+            builder: (context, state) => const RecurringScreen(),
           ),
           GoRoute(
             path: '/calendar',

@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RecurringPayment {
 
- String get id; String get name; double get amount; TransactionType get type; String get categoryId; String get accountId; RecurrenceFrequency get frequency; DateTime get startDate; DateTime? get endDate; int? get customDays;
+ String get id; String get name; double get amount; TransactionType get type; String? get categoryId; String? get accountId; RecurrenceFrequency get frequency; DateTime get startDate; DateTime? get endDate; int? get customDays;
 /// Create a copy of RecurringPayment
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $RecurringPaymentCopyWith<$Res>  {
   factory $RecurringPaymentCopyWith(RecurringPayment value, $Res Function(RecurringPayment) _then) = _$RecurringPaymentCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, double amount, TransactionType type, String categoryId, String accountId, RecurrenceFrequency frequency, DateTime startDate, DateTime? endDate, int? customDays
+ String id, String name, double amount, TransactionType type, String? categoryId, String? accountId, RecurrenceFrequency frequency, DateTime startDate, DateTime? endDate, int? customDays
 });
 
 
@@ -62,15 +62,15 @@ class _$RecurringPaymentCopyWithImpl<$Res>
 
 /// Create a copy of RecurringPayment
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? amount = null,Object? type = null,Object? categoryId = null,Object? accountId = null,Object? frequency = null,Object? startDate = null,Object? endDate = freezed,Object? customDays = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? amount = null,Object? type = null,Object? categoryId = freezed,Object? accountId = freezed,Object? frequency = null,Object? startDate = null,Object? endDate = freezed,Object? customDays = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as TransactionType,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
-as String,frequency: null == frequency ? _self.frequency : frequency // ignore: cast_nullable_to_non_nullable
+as TransactionType,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,accountId: freezed == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
+as String?,frequency: null == frequency ? _self.frequency : frequency // ignore: cast_nullable_to_non_nullable
 as RecurrenceFrequency,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,customDays: freezed == customDays ? _self.customDays : customDays // ignore: cast_nullable_to_non_nullable
@@ -159,7 +159,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  double amount,  TransactionType type,  String categoryId,  String accountId,  RecurrenceFrequency frequency,  DateTime startDate,  DateTime? endDate,  int? customDays)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  double amount,  TransactionType type,  String? categoryId,  String? accountId,  RecurrenceFrequency frequency,  DateTime startDate,  DateTime? endDate,  int? customDays)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RecurringPayment() when $default != null:
 return $default(_that.id,_that.name,_that.amount,_that.type,_that.categoryId,_that.accountId,_that.frequency,_that.startDate,_that.endDate,_that.customDays);case _:
@@ -180,7 +180,7 @@ return $default(_that.id,_that.name,_that.amount,_that.type,_that.categoryId,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  double amount,  TransactionType type,  String categoryId,  String accountId,  RecurrenceFrequency frequency,  DateTime startDate,  DateTime? endDate,  int? customDays)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  double amount,  TransactionType type,  String? categoryId,  String? accountId,  RecurrenceFrequency frequency,  DateTime startDate,  DateTime? endDate,  int? customDays)  $default,) {final _that = this;
 switch (_that) {
 case _RecurringPayment():
 return $default(_that.id,_that.name,_that.amount,_that.type,_that.categoryId,_that.accountId,_that.frequency,_that.startDate,_that.endDate,_that.customDays);case _:
@@ -200,7 +200,7 @@ return $default(_that.id,_that.name,_that.amount,_that.type,_that.categoryId,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  double amount,  TransactionType type,  String categoryId,  String accountId,  RecurrenceFrequency frequency,  DateTime startDate,  DateTime? endDate,  int? customDays)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  double amount,  TransactionType type,  String? categoryId,  String? accountId,  RecurrenceFrequency frequency,  DateTime startDate,  DateTime? endDate,  int? customDays)?  $default,) {final _that = this;
 switch (_that) {
 case _RecurringPayment() when $default != null:
 return $default(_that.id,_that.name,_that.amount,_that.type,_that.categoryId,_that.accountId,_that.frequency,_that.startDate,_that.endDate,_that.customDays);case _:
@@ -215,15 +215,15 @@ return $default(_that.id,_that.name,_that.amount,_that.type,_that.categoryId,_th
 
 
 class _RecurringPayment implements RecurringPayment {
-  const _RecurringPayment({required this.id, required this.name, required this.amount, required this.type, required this.categoryId, required this.accountId, required this.frequency, required this.startDate, this.endDate, this.customDays});
+  const _RecurringPayment({required this.id, required this.name, required this.amount, required this.type, this.categoryId, this.accountId, required this.frequency, required this.startDate, this.endDate, this.customDays});
   
 
 @override final  String id;
 @override final  String name;
 @override final  double amount;
 @override final  TransactionType type;
-@override final  String categoryId;
-@override final  String accountId;
+@override final  String? categoryId;
+@override final  String? accountId;
 @override final  RecurrenceFrequency frequency;
 @override final  DateTime startDate;
 @override final  DateTime? endDate;
@@ -259,7 +259,7 @@ abstract mixin class _$RecurringPaymentCopyWith<$Res> implements $RecurringPayme
   factory _$RecurringPaymentCopyWith(_RecurringPayment value, $Res Function(_RecurringPayment) _then) = __$RecurringPaymentCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, double amount, TransactionType type, String categoryId, String accountId, RecurrenceFrequency frequency, DateTime startDate, DateTime? endDate, int? customDays
+ String id, String name, double amount, TransactionType type, String? categoryId, String? accountId, RecurrenceFrequency frequency, DateTime startDate, DateTime? endDate, int? customDays
 });
 
 
@@ -276,15 +276,15 @@ class __$RecurringPaymentCopyWithImpl<$Res>
 
 /// Create a copy of RecurringPayment
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? amount = null,Object? type = null,Object? categoryId = null,Object? accountId = null,Object? frequency = null,Object? startDate = null,Object? endDate = freezed,Object? customDays = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? amount = null,Object? type = null,Object? categoryId = freezed,Object? accountId = freezed,Object? frequency = null,Object? startDate = null,Object? endDate = freezed,Object? customDays = freezed,}) {
   return _then(_RecurringPayment(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,amount: null == amount ? _self.amount : amount // ignore: cast_nullable_to_non_nullable
 as double,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
-as TransactionType,categoryId: null == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
-as String,accountId: null == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
-as String,frequency: null == frequency ? _self.frequency : frequency // ignore: cast_nullable_to_non_nullable
+as TransactionType,categoryId: freezed == categoryId ? _self.categoryId : categoryId // ignore: cast_nullable_to_non_nullable
+as String?,accountId: freezed == accountId ? _self.accountId : accountId // ignore: cast_nullable_to_non_nullable
+as String?,frequency: null == frequency ? _self.frequency : frequency // ignore: cast_nullable_to_non_nullable
 as RecurrenceFrequency,startDate: null == startDate ? _self.startDate : startDate // ignore: cast_nullable_to_non_nullable
 as DateTime,endDate: freezed == endDate ? _self.endDate : endDate // ignore: cast_nullable_to_non_nullable
 as DateTime?,customDays: freezed == customDays ? _self.customDays : customDays // ignore: cast_nullable_to_non_nullable
